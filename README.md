@@ -87,7 +87,7 @@ namespace Liquid.Example.ServiceClient
 
 The configuration can be made in the appsettings.json, such as:
 
-```json
+```Json
 {
     "services": [
     {
