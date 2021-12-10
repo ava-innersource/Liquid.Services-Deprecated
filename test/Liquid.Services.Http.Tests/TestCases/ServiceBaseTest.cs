@@ -1,14 +1,12 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Liquid.Core.Context;
-using Liquid.Core.DependencyInjection;
-using Liquid.Core.Telemetry;
+﻿using Liquid.Core.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
 using Microsoft.Extensions.Logging.Console;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Liquid.Services.Http.Tests.TestCases
 {
@@ -16,7 +14,7 @@ namespace Liquid.Services.Http.Tests.TestCases
     /// Base Service Client Test Class.
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public abstract class ServiceBaseTest 
+    public abstract class ServiceBaseTest
     {
         /// <summary>
         /// Gets or sets the subject under test.
@@ -35,13 +33,12 @@ namespace Liquid.Services.Http.Tests.TestCases
             var services = new ServiceCollection();
             services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider, ConsoleLoggerProvider>());
             LoggerProviderOptions.RegisterProviderOptions<ConsoleLoggerOptions, ConsoleLoggerProvider>(services);
-            
+
             services.AddSingleton(LoggerFactory.Create(builder => { builder.AddConsole(); }));
             IConfiguration configurationRoot = new ConfigurationBuilder().AddJsonFile($"{AppDomain.CurrentDomain.BaseDirectory}appsettings.json").Build();
-            services.AddSingleton(configurationRoot);
 
-            services.AddDefaultTelemetry();
-            services.AddDefaultContext();
+            services.AddSingleton(configurationRoot);
+            services.AddLiquidConfiguration();
             services.AddAutoMapper(GetType().Assembly);
             services.AddHttpClient();
 
